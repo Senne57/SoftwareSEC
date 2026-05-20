@@ -2,26 +2,25 @@ name: SCA - Dependency Review
 
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
   schedule:
     - cron: '0 6 * * 2'
 
 jobs:
-  dependency-review:
-    name: Dependency Review
+  sca:
+    name: SCA Scan
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          fail-on-severity: moderate
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1'
+          severity: 'MODERATE,HIGH,CRITICAL'
+          scanners: 'vuln'
