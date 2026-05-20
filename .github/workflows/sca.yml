@@ -22,5 +22,5 @@ jobs:
           scan-ref: '.'
           format: 'table'
           exit-code: '1'
-          severity: 'MODERATE,HIGH,CRITICAL'
+          severity: 'MEDIUM,HIGH,CRITICAL'
           scanners: 'vuln'
