@@ -4,23 +4,19 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 6 * * *'  # Elke dag om 6u
+    - cron: '0 6 * * *'
 
 jobs:
   semgrep:
     name: Semgrep SAST Scan
     runs-on: ubuntu-latest
 
+    container:
+      image: semgrep/semgrep
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Semgrep
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: >-
-            p/javascript
-            p/nodejs
-            p/owasp-top-ten
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      - name: Run Semgrep scan
+        run: semgrep scan --config=p/javascript --config=p/nodejs --config=p/owasp-top-ten --error .
